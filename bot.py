@@ -70,4 +70,4 @@ if __name__ == "__main__":
             except:
                 pass
             
-            print(f'Parsed {i} successfully') /html/body/section[2]/div/div[10]/a[2]
+            print(f'Parsed {i} successfully')
