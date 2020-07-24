@@ -45,9 +45,15 @@ def parse_answers(html: str) -> dict:
         .replace("виїмок'", 'виїмок"').replace("зв'язок'", 'зв\'язок"')\
         .replace("замок'", 'замок"').replace('"Вогненебезпечно. Газ"', 'Вогненебезпечно. Газ"')\
         .replace("гущі'", 'гущі"').replace("'рік", '"рік').replace("'Вони", '"Вони')\
-        .replace("задирок'", 'задирок"').replace("накладок'", 'накладок"')
+        .replace("задирок'", 'задирок"').replace("накладок'", 'накладок"')\
+        .replace("рукавичок'", 'рукавичок"').replace('пред"являються', "пред'являються")\
+        .replace("'Вологі", '"Вологі')
 
-    data = json.loads(json_data)
+    try:
+        data = json.loads(json_data)
+    except:
+        print(json_data)
+        print("Тут ошибка!")
 
     for item in data['data']:
         answers = []
