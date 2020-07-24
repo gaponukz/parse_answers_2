@@ -2,7 +2,9 @@ from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from time import sleep
 from utils import parse_answers
+from config import file_name
 import json, sys, os
+import xlsxwriter
 
 class ParseAnswers(object):
     def __init__(self) -> None:
@@ -39,7 +41,7 @@ if __name__ == "__main__":
     username = 'qwert'
     password = '147258'
     epoch = 40
-    PATH_TO_DATA = os.path.dirname(os.path.abspath(__file__)) + '/data/'
+    PATH_TO_DATA = os.path.dirname(os.path.abspath(__file__)) + '\\data\\'
     black_list = [6, 7, 8, 15, 16]
 
     if len(sys.argv) > 1:
@@ -60,17 +62,45 @@ if __name__ == "__main__":
     else:
         for j in range(1, epoch + 1):
             os.mkdir(PATH_TO_DATA + str(j))
-            for i in range(1, 14):
-                try:
-                    parser = ParseAnswers()
-                    parser.login(username, password)
-                    data, num = parser.parse(index = str(i))
+            for i in range(1, 18):
+                if not i in black_list:
+                    try:
+                        parser = ParseAnswers()
+                        parser.login(username, password)
+                        data, num = parser.parse(index = str(i))
+                        parser.close()
 
-                    with open (PATH_TO_DATA + str(j) + '/' + f'{num}.json', 'w') as f:
-                        f.write(json.dumps(data, indent = 4, sort_keys = True))
+                        with open (PATH_TO_DATA + str(j) + '\\' + f'{num}.json', 'w') as f:
+                            f.write(json.dumps(data, indent = 4, sort_keys = True))
+                        
+                        workbook = xlsxwriter.Workbook(PATH_TO_DATA + str(j) + '\\' + f'{file_name[str(i)]}.xlsx') 
+                        worksheet = workbook.add_worksheet()
+                        
+                        row, column = 0, 0
+                        titles = ['Вопрос', 'Все ответи', 'Правильний ответ']
+                        for item in titles: 
+                            worksheet.write(row, column, item) 
+                            column += 1
 
-                    parser.close()
-                except:
-                    pass
-                
+                        row = 1
+                        for item in data['data']:
+                            column = 0
+                            all_answers = ''
+                            true_answer = ''
+
+                            for answer in item['answers']:
+                                all_answers += answer['title'] + '\n'
+                                if answer['is_true_answer']:
+                                    true_answer = answer['title']
+
+                            worksheet.write(row, column, item['title'])
+                            worksheet.write(row, column + 1, all_answers)
+                            worksheet.write(row, column + 2, true_answer)
+
+                            row += 1
+
+                            workbook.close()
+                    except:
+                        pass    
+                    
                 print(f'Parsed {i} successfully')
