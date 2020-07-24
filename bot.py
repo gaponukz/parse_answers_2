@@ -20,12 +20,16 @@ class ParseAnswers(object):
         self.driver.find_element_by_xpath('//*[@id="login"]/form/button').click()
 
     def parse(self, index = '1') -> dict:
+        path_to_element = '6'
+        path_to_element = '10' if index == '8' else path_to_element
+        path_to_element = '8' if index == '11' else path_to_element
         sleep(1)
         self.driver.find_element_by_xpath('/html/body/nav/div/div/div/div[4]/a').click()
         self.driver.find_element_by_xpath(f'/html/body/section[2]/div/div/div[{index}]/div/div[2]/a').click()
         sleep(1)
-        self.driver.find_element_by_xpath('/html/body/section[2]/div/div[6]/a[2]').click()
-        num = self.driver.current_url.split('/quiz/')[-1] 
+        self.driver.find_element_by_xpath(f'/html/body/section[2]/div/div[{path_to_element}]/a[2]').click()
+        num = self.driver.current_url.split('/quiz/')[-1]
+
         return parse_answers(self.driver.page_source), num
 
     def close(self) -> None:
@@ -38,6 +42,7 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1:
         i = sys.argv[1]
+        
         try:
             parser = ParseAnswers()
             parser.login(username, password)
@@ -65,4 +70,4 @@ if __name__ == "__main__":
             except:
                 pass
             
-            print(f'Parsed {i} successfully')
+            print(f'Parsed {i} successfully') /html/body/section[2]/div/div[10]/a[2]
