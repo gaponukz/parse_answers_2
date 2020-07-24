@@ -47,7 +47,7 @@ def parse_answers(html: str) -> dict:
         .replace("гущі'", 'гущі"').replace("'рік", '"рік').replace("'Вони", '"Вони')\
         .replace("задирок'", 'задирок"').replace("накладок'", 'накладок"')\
         .replace("рукавичок'", 'рукавичок"').replace('пред"являються', "пред'являються")\
-        .replace("'Вологі", '"Вологі')
+        .replace("'Вологі", '"Вологі').replace("площадок'", 'площадок"')
 
     try:
         data = json.loads(json_data)
