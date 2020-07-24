@@ -1,6 +1,13 @@
 from json import JSONDecoder
 import json
 
+def write(filename: str, text: str) -> None:
+    with open(filename, 'r') as filetext:
+        filetext = filetext.read()
+
+    with open(filename, 'w') as file:
+        file.write(f'{filetext}\n{text}\n\n')
+
 def parse_json(text: str, decoder = JSONDecoder()) -> str:
     pos = 0
     while True:
@@ -52,7 +59,7 @@ def parse_answers(html: str) -> dict:
     try:
         data = json.loads(json_data)
     except:
-        print(json_data)
+        write('errors.json', json_data)
         print("Тут ошибка!")
 
     for item in data['data']:
