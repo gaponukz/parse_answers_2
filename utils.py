@@ -44,9 +44,9 @@ def parse_answers(html: str) -> dict:
         .replace('"НЗ"', "'НЗ'").replace("стулок'", 'стулок"')\
         .replace("виїмок'", 'виїмок"').replace("зв'язок'", 'зв\'язок"')\
         .replace("замок'", 'замок"').replace('"Вогненебезпечно. Газ"', 'Вогненебезпечно. Газ"')\
-        .replace("гущі'", 'гущі"').replace("'рік", '"рік').replace("'Вони", '"Вони')
+        .replace("гущі'", 'гущі"').replace("'рік", '"рік').replace("'Вони", '"Вони')\
+        .replace("задирок'", 'задирок"').replace("накладок'", 'накладок"')
 
-    # print(json_data)
     data = json.loads(json_data)
 
     for item in data['data']:
