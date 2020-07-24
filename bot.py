@@ -2,7 +2,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 from time import sleep
 from utils import parse_answers
-import json, sys
+import json, sys, os
 
 class ParseAnswers(object):
     def __init__(self) -> None:
@@ -38,6 +38,8 @@ class ParseAnswers(object):
 if __name__ == "__main__":
     username = 'qwert'
     password = '147258'
+    epoch = 40
+    PATH_TO_DATA = os.path.dirname(os.path.abspath(__file__)) + '/data/'
     black_list = [6, 7, 8, 15, 16]
 
     if len(sys.argv) > 1:
@@ -56,18 +58,19 @@ if __name__ == "__main__":
         except Exception as error:
             print(f'{error} in {i} item, please contact the author.')
     else:
-        for i in range(1, 14):
-            try:
-                parser = ParseAnswers()
-                parser.login(username, password)
-                data, num = parser.parse(index = str(i))
+        for j in range(1, epoch + 1):
+            os.mkdir(PATH_TO_DATA + str(j))
+            for i in range(1, 14):
+                try:
+                    parser = ParseAnswers()
+                    parser.login(username, password)
+                    data, num = parser.parse(index = str(i))
 
-                with open (f'{num}.json', 'w') as f:
-                    f.write(json.dumps(data, \
-                        indent = 4, sort_keys = True))
+                    with open (PATH_TO_DATA + str(j) + '/' + f'{num}.json', 'w') as f:
+                        f.write(json.dumps(data, indent = 4, sort_keys = True))
 
-                parser.close()
-            except:
-                pass
-            
-            print(f'Parsed {i} successfully')
+                    parser.close()
+                except:
+                    pass
+                
+                print(f'Parsed {i} successfully')
