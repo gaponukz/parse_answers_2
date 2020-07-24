@@ -13,7 +13,3 @@ python bot.py
 python bot.py 2  (это спарсить все со второго теста)
 python bot.py {номер_теста}
 ```
-После того как все файлы json готовы запускаем transform.py для генерации excel
-```python
-python transform.py
-```
