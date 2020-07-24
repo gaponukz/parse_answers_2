@@ -25,8 +25,8 @@ class ParseAnswers(object):
         self.driver.find_element_by_xpath(f'/html/body/section[2]/div/div/div[{index}]/div/div[2]/a').click()
         sleep(1)
         self.driver.find_element_by_xpath('/html/body/section[2]/div/div[6]/a[2]').click()
-
-        return parse_answers(self.driver.page_source)
+        num = self.driver.current_url.split('/quiz/')[-1] 
+        return parse_answers(self.driver.page_source), num
 
     def close(self) -> None:
         self.driver.close()
@@ -41,27 +41,28 @@ if __name__ == "__main__":
         try:
             parser = ParseAnswers()
             parser.login(username, password)
-
-            with open (f'{i}.json', 'w') as f:
-                f.write(json.dumps(parser.parse(index = i), \
+            data, num = parser.parse(index = str(i))
+                
+            with open (f'{num}.json', 'w') as f:
+                f.write(json.dumps(data, \
                     indent = 4, sort_keys = True))
 
             parser.close()
-        except:
-            print(f'Error in {i} item, please contact the author.')
+        except Exception as error:
+            print(f'{error} in {i} item, please contact the author.')
     else:
-        for i in range(1, 19):
-            if not i in black_list:
-                try:
-                    parser = ParseAnswers()
-                    parser.login(username, password)
+        for i in range(1, 14):
+            try:
+                parser = ParseAnswers()
+                parser.login(username, password)
+                data, num = parser.parse(index = str(i))
 
-                    with open (f'{i}.json', 'w') as f:
-                        f.write(json.dumps(parser.parse(index = str(i)), \
-                            indent = 4, sort_keys = True))
+                with open (f'{num}.json', 'w') as f:
+                    f.write(json.dumps(data, \
+                        indent = 4, sort_keys = True))
 
-                    parser.close()
-                except:
-                    pass
-                
-                print(f'Parsed {i} successfully')
+                parser.close()
+            except:
+                pass
+            
+            print(f'Parsed {i} successfully')
